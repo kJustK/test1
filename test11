@@ -1,0 +1,82 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Wed Jul 26 14:10:39 2017
+
+@author: kaushalh_suvarna
+"""
+from guizero import App, Text, TextBox, PushButton
+        
+def encode():
+    msg=iptMsg.get()
+    m11=3
+    m12=4
+    m21=2
+    m22=3
+    op=""
+    
+    chars=len(msg)
+    if chars%2==1:
+        msg+=chr(0)
+        chars=chars+1
+    #print(chars)
+    for i in range(0, chars-1, 2):    
+        x,y = msg[i],msg[i+1]
+    #print("The originals: ", x, y)
+    #print(ord(x),ord(y))
+        a = ((m11*ord(x)+m12*ord(y))%128)
+        b = ((m21*ord(x)+m22*ord(y))%128)
+    #print("New chars: ", chr(a), chr(b))
+    #print(a,b)
+        op = op+chr(a)+chr(b)
+    #print (op)    
+    #return op
+    #txtOp.set(op)
+    optMsg.set(op)
+        
+def decode():
+    msg=optMsg.get()
+    m11=3
+    m12=-4
+    m21=-2
+    m22=3
+    op=""
+    
+    for i in range(0, len(msg)-1, 2):    
+        x,y = msg[i],msg[i+1]
+    #print("coded chars: ", x, y)
+    #print(ord(x),ord(y))
+        a = ((m11*(ord(x))+m12*(ord(y)))%128)
+        b = ((m21*(ord(x))+m22*(ord(y)))%128)
+    #print("Voila: ", chr(a), chr(b))
+        op = op+chr(a)+chr(b)
+    #print("Decoded message: ", op)
+    #return op
+    optMsg.set(op)
+
+#def winOpen(msg):
+#    winOp = App(title="Secret message", width=700, height=300)
+#    TextBox(winOp, width=100, text=encode(msg))
+#    winOp.display()    
+
+#out=encode("here")
+#print(out)
+#print(decode(out))
+
+winMain = App(title="Encode your message", width=700, height=330)
+Text(winMain, text="")
+txtInfo = Text(winMain, text="Enter your message here:")
+iptMsg = TextBox(winMain, width=100)
+
+#opMsg = PushButton(winMain, text="Encode Message", command=say_my_name)
+Text(winMain, text="")
+PushButton(winMain, text="Encode Message", command=encode)
+Text(winMain, text="")
+Text(winMain, text="")
+txtOp = Text(winMain, text="Your encrypted message here:")
+optMsg = TextBox(winMain, width=100)
+
+Text(winMain, text="")
+PushButton(winMain, text="Decode Message", command=decode)
+Text(winMain, text="")
+
+winMain.display()
